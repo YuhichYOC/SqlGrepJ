@@ -1,0 +1,73 @@
+CREATE OR REPLACE PROCEDURE PR_Test02 (
+  ARG1 IN BIGINT 
+, ARG2 IN VARCHAR 
+) 
+IS 
+  b BIGINT; 
+  p BIGINT; 
+BEGIN 
+  INSERT INTO 
+      Bugs 
+      ( 
+      date_reported 
+    , description 
+    , reported_by 
+      ) 
+  VALUES 
+      ( 
+      SYSDATE 
+    , ARG2 
+    , ARG1 
+      ) 
+  ; 
+  INSERT INTO 
+      Products 
+      ( 
+      product_name 
+      ) 
+  VALUES 
+      ( 
+      ARG2 
+      ) 
+  ; 
+  SELECT 
+      bug_id 
+  INTO 
+      b 
+  FROM 
+      Bugs 
+  WHERE 
+      reported_by   = ARG1 
+  AND description   = ARG2 
+  AND date_reported = 
+      ( 
+      SELECT 
+          MAX(date_reported) 
+      FROM 
+          Bugs 
+      WHERE 
+          reported_by = ARG1 
+      ) 
+  ; 
+  SELECT 
+      product_id 
+  INTO 
+      p 
+  FROM 
+      Products 
+  WHERE 
+      product_name = ARG2 
+  ; 
+  INSERT INTO 
+      BugsProducts 
+      ( 
+      bug_id 
+    , product_id 
+      ) 
+  VALUES 
+      ( 
+      b 
+    , p 
+      ) 
+  ; 
+END;

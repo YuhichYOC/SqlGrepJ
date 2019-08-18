@@ -1,0 +1,78 @@
+CREATE OR REPLACE PACKAGE BODY PB_Test01 AS 
+
+  FUNCTION PB_01_F_Test01 ( 
+    ARG1 IN SERIAL 
+  , ARG2 IN BIGINT 
+  ) RETURN VARCHAR(70) 
+  IS 
+    RET VARCHAR(70); 
+  BEGIN 
+    SELECT 
+        ( 
+        SELECT 
+            product_name 
+        FROM 
+            Products 
+        WHERE 
+            product_id = ARG1 
+        ) 
+        || 
+        ( 
+        SELECT 
+            tag 
+        FROM 
+            Tags 
+        WHERE 
+            bug_id = ARG2 
+        ) 
+    INTO 
+        RET 
+    FROM 
+        DUAL 
+    ; 
+    RETURN RET; 
+  END; 
+
+  PROCEDURE PB_01_P_Test01 ( 
+    ARG1 IN SERIAL 
+  , ARG2 IN BIGINT 
+  ) 
+  IS 
+  BEGIN 
+    UPDATE 
+        Accounts 
+    SET 
+        email = 
+            PB_01_F_Test01(ARG1, ARG2) 
+            || 
+            ( 
+            SELECT 
+                status 
+            FROM 
+                BugStatus 
+            WHERE 
+                status = 
+                    ( 
+                    SELECT 
+                        status 
+                    FROM 
+                        Bugs 
+                    WHERE 
+                        reported_by   = ARG1 
+                    AND date_reported = 
+                        ( 
+                        SELECT 
+                            MAX(date_reported) 
+                        FROM 
+                            Bugs 
+                        WHERE 
+                            reported_by = ARG1 
+                        ) 
+                    ) 
+            ) 
+    WHERE 
+        account_id = ARG1 
+    ; 
+  END; 
+
+END;

@@ -1,0 +1,19 @@
+CREATE OR REPLACE FUNCTION F_Test01 ( 
+  ARG1 IN BIGINT UNSIGNED 
+, ARG2 IN BIGINT UNSIGNED 
+) RETURN DATETIME 
+IS 
+  TEST01_VALUE DATETIME; 
+BEGIN 
+  SELECT 
+      comment_date 
+  INTO 
+      TEST01_VALUE 
+  FROM 
+      Comments 
+  WHERE 
+      bug_id = ARG1 
+  AND author = ARG2 
+  ; 
+  RETURN TEST01_VALUE; 
+END;

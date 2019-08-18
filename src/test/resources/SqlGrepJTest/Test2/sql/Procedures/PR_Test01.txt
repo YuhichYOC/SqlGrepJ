@@ -1,0 +1,35 @@
+CREATE OR REPLACE PROCEDURE PR_Test01 ( 
+  ARG1 IN BIGINT 
+) 
+IS 
+  VAL VARCHAR(20); 
+BEGIN 
+  SELECT 
+      SUBSTR(comment, 0, 20) 
+  INTO 
+      VAL 
+  FROM 
+      Comments 
+  WHERE 
+      author       = ARG1 
+  AND comment_date = 
+      ( 
+      SELECT 
+          MAX(comment_date) 
+      FROM 
+          Comments 
+      WHERE 
+          author = ARG1 
+      ) 
+  ; 
+  INSERT INTO 
+      BugStatus 
+      ( 
+      status 
+      ) 
+  VALUES 
+      ( 
+      VAL 
+      ) 
+  ; 
+END;

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ContExtJ">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ContExtJ.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,25 @@
+CREATE OR REPLACE VIEW V_Test02 
+AS 
+SELECT 
+    A.account_name 
+  , C.comment 
+  , S.screenshot_image 
+FROM 
+    Accounts A 
+JOIN 
+    Bugs B 
+ON 
+    A.account_id = B.reported_by 
+JOIN 
+    Comments C 
+ON 
+    B.bug_id     = C.bug_id 
+AND A.account_id = C.author 
+JOIN 
+    Screenshots S 
+ON 
+    B.bug_id = S.bug_id 
+ORDER BY 
+    A.account_id 
+  , C.comment_date 
+

@@ -1,0 +1,97 @@
+CREATE OR REPLACE PACKAGE BODY PB_Test02 AS 
+
+  FUNCTION PB_02_F_Test01 ( 
+    ARG1 IN BIGINT 
+  ) RETURN TEXT 
+  IS 
+    RET TEXT; 
+  BEGIN 
+    SELECT 
+        comment 
+    INTO 
+        RET 
+    FROM 
+        Comments 
+    WHERE 
+        author = ARG1 
+    AND comment_date = 
+        ( 
+        SELECT 
+            MAX(comment_date) 
+        FROM 
+            Comments 
+        WHERE 
+            author = ARG1 
+        ) 
+    ; 
+    RETURN RET; 
+  END; 
+
+  PROCEDURE PB_02_P_Test01 ( 
+    ARG1 IN BIGINT 
+  ) 
+  IS 
+    val BIGINT; 
+  BEGIN 
+    SELECT 
+        bug_id 
+    INTO 
+        val 
+    FROM 
+        Comments 
+    WHERE 
+        author = ARG1 
+    AND comment_date = 
+        ( 
+        SELECT 
+            MAX(comment_date) 
+        FROM 
+            Comments 
+        WHERE 
+            author = ARG1 
+        ) 
+    ; 
+    INSERT INTO 
+        Comments 
+        ( 
+        bug_id 
+      , author 
+      , comment_date 
+      , comment 
+        ) 
+    VALUES 
+        ( 
+        val 
+      , ARG1 
+      , SYSDATE 
+      , SUBSTR(
+            PB_02_F_Test01(ARG1) 
+          , 0 
+          , 5 
+        ) 
+        || 
+        SUBSTR( 
+            ( 
+            SELECT 
+                PB_Test01.PB_01_F_Test01( 
+                    ( 
+                    SELECT 
+                        MAX(product_id) 
+                    FROM 
+                        BugsProducts 
+                    WHERE 
+                        bug_id = val 
+                    ) 
+                  , val 
+                ) 
+            FROM 
+                DUAL 
+            ) 
+          , 0 
+          , 5 
+        ) 
+        ) 
+    ; 
+  END; 
+
+END;

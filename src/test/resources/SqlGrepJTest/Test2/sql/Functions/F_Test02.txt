@@ -1,0 +1,19 @@
+CREATE OR REPLACE FUNCTION F_Test02 ( 
+  ARG1 IN BIGINT UNSIGNED 
+, ARG2 IN BIGINT UNSIGNED 
+) RETURN VARCHAR 
+IS 
+  TEST02_VALUE VARCHAR(100); 
+BEGIN 
+  SELECT 
+      caption 
+  INTO 
+      TEST02_VALUE 
+  FROM 
+      Screenshots 
+  WHERE 
+      bug_id   = ARG1 
+  AND image_id = ARG2 
+  ; 
+  RETURN TEST02_VALUE; 
+END;

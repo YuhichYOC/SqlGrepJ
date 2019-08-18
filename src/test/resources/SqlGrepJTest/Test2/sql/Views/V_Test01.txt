@@ -1,0 +1,19 @@
+CREATE OR REPLACE VIEW V_Test01 
+AS 
+SELECT 
+    PR.product_name 
+  , F_Test01(BP.bug_id, B.verified_by) AS ANY_RESPONSE_AT 
+  , PB_Test02.PB_02_F_Test01(B.verified_by, F_Test01(BP.bug_id, B.verified_by)) AS COMMENT 
+FROM 
+    Products PR 
+JOIN 
+    BugsProducts BP 
+ON 
+    PR.product_id = BP.product_id 
+JOIN 
+    Bugs B 
+ON 
+    BP.bug_id = B.bug_id 
+ORDER BY 
+    product_name 
+;

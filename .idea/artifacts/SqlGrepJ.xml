@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SqlGrepJ">
+    <output-path>$PROJECT_DIR$/out/artifacts/SqlGrepJ</output-path>
+    <root id="archive" name="SqlGrepJ.jar">
+      <element id="module-output" name="SqlGrepJ" />
+      <element id="library" level="project" name="ContExtJ" />
+    </root>
+  </artifact>
+</component>
